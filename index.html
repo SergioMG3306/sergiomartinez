@@ -11,6 +11,8 @@
 <meta name="twitter:card" content="summary">
 <meta name="theme-color" content="#0e1116">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%233b82f6'/%3E%3Ccircle cx='32' cy='32' r='15' fill='white'/%3E%3Cpath d='M32 20l4 8h8l-6 6 2 9-8-5-8 5 2-9-6-6h8z' fill='%230e1116'/%3E%3C/svg%3E">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6703293705965908"
+     crossorigin="anonymous"></script>
 <style>
 /* ============ Design tokens ============ */
 :root[data-theme="dark"]{
@@ -403,7 +405,15 @@ window.WC26 = {"meta":{"generated":"2026-06-10T23:05:59Z","n_sims":1000000,"seed
    3) Pégalo aquí abajo entre las comillas y vuelve a subir el archivo.
    Con el ID vacío no se carga NADA de publicidad.
    ============================================================ */
-const ADSENSE_CLIENT = '';
+const ADSENSE_CLIENT = 'ca-pub-6703293705965908';
+/* Resultados OFICIALES ya disputados (se fijan como manuales: la simulación los respeta).
+   Partido 1 · 11-jun-2026 · Grupo A: México 2-0 Sudáfrica (Quiñones 9', R. Jiménez 67'). */
+const OFFICIAL_RESULTS = { 'G0': {h:2, a:0} };
+function applyOfficialResults(){
+  for(const [k,r] of Object.entries(OFFICIAL_RESULTS)){
+    if(!Store.result(k)) Store.setResult(k, r.h, r.a, 'manual');
+  }
+}
 const D = window.WC26;
 const CODES = Object.keys(D.teams);
 const GROUPS_L = 'ABCDEFGHIJKL';
@@ -548,11 +558,13 @@ const Store = {
     for(const [k,r] of Object.entries(this.state.results)) if(r.source==='sim') delete this.state.results[k];
     // re-validar cuadro: si quedan KO manuales con entrantes ya indefinidos se conservan (se reaplican si coinciden)
     this.state.tourCursor=0; this.save();
+    if(typeof applyOfficialResults==='function') applyOfficialResults();
   },
   clearAll(alsoFavorite){
     this.state.results={}; this.state.tourCursor=0;
     if(alsoFavorite) this.state.favorite=null;
     this.save();
+    if(typeof applyOfficialResults==='function') applyOfficialResults();
   },
 };
 
@@ -980,6 +992,7 @@ const App = {
     this.lang=Store.state.lang||'es';
     document.documentElement.setAttribute('data-theme',Store.state.theme||'dark');
     document.documentElement.lang=this.lang;
+    applyOfficialResults();
     this.renderNav();
     document.getElementById('brandtag').textContent=T().tag;
     document.getElementById('foot').innerHTML=`<div>${esc(T().footer)}</div>
@@ -1010,11 +1023,13 @@ const App = {
   initAds(){
     if(!ADSENSE_CLIENT||App._adsLoaded) return;
     App._adsLoaded=true;
-    const sc=document.createElement('script');
-    sc.async=true;
-    sc.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='+ADSENSE_CLIENT;
-    sc.crossOrigin='anonymous';
-    document.head.appendChild(sc);
+    if(!document.querySelector('script[src*="adsbygoogle.js"]')){
+      const sc=document.createElement('script');
+      sc.async=true;
+      sc.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='+ADSENSE_CLIENT;
+      sc.crossOrigin='anonymous';
+      document.head.appendChild(sc);
+    }
     const slot=document.getElementById('adslot-top');
     if(slot){
       slot.classList.add('on');
