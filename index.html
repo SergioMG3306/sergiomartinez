@@ -10,9 +10,17 @@
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
 <meta name="theme-color" content="#0e1116">
+<meta name="robots" content="index,follow">
+<meta name="author" content="WC26 Pulse">
+<meta name="google-adsense-account" content="ca-pub-6703293705965908">
+<link rel="canonical" href="https://wc2026predictiontool.es/">
+<meta property="og:url" content="https://wc2026predictiontool.es/">
+<meta property="og:site_name" content="WC26 Pulse">
+<script>
+window.adsbygoogle = window.adsbygoogle || [];
+window.adsbygoogle.pauseAdRequests = 1;
+</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%233b82f6'/%3E%3Ccircle cx='32' cy='32' r='15' fill='white'/%3E%3Cpath d='M32 20l4 8h8l-6 6 2 9-8-5-8 5 2-9-6-6h8z' fill='%230e1116'/%3E%3C/svg%3E">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6703293705965908"
-     crossorigin="anonymous"></script>
 <style>
 /* ============ Design tokens ============ */
 :root[data-theme="dark"]{
@@ -278,6 +286,60 @@ input[type=range]{width:100%;accent-color:var(--pri)}
 }
 
 
+
+/* ============ Legal / cookies / AdSense safety ============ */
+.adlabel{
+  text-align:center;
+  font-size:.62rem;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  color:var(--tx3);
+  margin-bottom:6px;
+}
+.legal-links{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:8px 14px;
+  margin-top:8px;
+}
+.legal-links a{color:var(--tx2)}
+.legal-links a:hover{color:var(--pri)}
+.cookiebar{
+  position:fixed;
+  left:18px;
+  right:18px;
+  bottom:18px;
+  z-index:500;
+  max-width:980px;
+  margin:0 auto;
+  display:none;
+  grid-template-columns:1fr auto;
+  gap:16px;
+  align-items:center;
+  padding:14px 16px;
+  border-radius:14px;
+  background:color-mix(in srgb,var(--panel) 96%,transparent);
+  border:1px solid var(--line2);
+  box-shadow:0 16px 46px rgba(0,0,0,.34);
+  backdrop-filter:blur(14px);
+}
+.cookiebar.on{display:grid;animation:reveal .25s ease}
+.cookiebar h3{font-size:.95rem;margin-bottom:4px}
+.cookiebar p{font-size:.78rem;line-height:1.45;color:var(--tx2)}
+.cookiebar .actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.legal-list{display:grid;gap:8px;margin:10px 0 0 18px}
+.legal-list li{padding-left:2px}
+@media(max-width:720px){
+  .cookiebar{
+    left:10px;
+    right:10px;
+    bottom:calc(86px + env(safe-area-inset-bottom));
+    grid-template-columns:1fr;
+  }
+  .cookiebar .actions{justify-content:flex-start}
+}
+
 /* ============ Mobile navigation fix ============ */
 @media(max-width:720px){
   body{
@@ -370,7 +432,6 @@ input[type=range]{width:100%;accent-color:var(--pri)}
   <button class="iconbtn" id="themebtn" title="Tema" onclick="App.toggleTheme()">◐</button>
   <button class="langbtn" id="langbtn" onclick="App.toggleLang()">EN</button>
 </header>
-<div id="adslot-top" class="adslot"><ins class="adsbygoogle" style="display:block" data-ad-format="auto" data-full-width-responsive="true"></ins></div>
 <main id="main">
   <section class="view on" id="v-home"></section>
   <section class="view" id="v-tour"></section>
@@ -382,6 +443,13 @@ input[type=range]{width:100%;accent-color:var(--pri)}
   <section class="view" id="v-analysis"></section>
   <section class="view" id="v-method"></section>
 </main>
+<div id="adslot-main" class="adslot" aria-label="Publicidad">
+  <div class="adlabel">Publicidad</div>
+  <ins class="adsbygoogle" style="display:block"
+       data-ad-client="ca-pub-6703293705965908"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+</div>
 <div class="modal" id="modal" onclick="if(event.target===this)this.classList.remove('on')">
   <div class="inner card" id="modalbody"></div>
 </div>
@@ -390,6 +458,17 @@ input[type=range]{width:100%;accent-color:var(--pri)}
 </div>
 <div class="bktip" id="bktip"></div>
 <div class="toast" id="toast"></div>
+<div class="cookiebar" id="cookiebar" role="dialog" aria-live="polite" aria-label="Aviso de privacidad y cookies">
+  <div>
+    <h3 id="cookiebar-title">Privacidad y cookies</h3>
+    <p id="cookiebar-text">Guardamos tu predicción en este navegador y solo cargamos publicidad de Google cuando aceptas cookies de publicidad. Puedes usar la herramienta con cookies necesarias únicamente.</p>
+  </div>
+  <div class="actions">
+    <button class="btn sm" id="cookie-accept" type="button">Aceptar publicidad</button>
+    <button class="btn sec sm" id="cookie-reject" type="button">Solo necesarias</button>
+    <button class="btn sec sm" id="cookie-more" type="button">Más información</button>
+  </div>
+</div>
 <footer id="foot"></footer>
 
 <script>
@@ -407,11 +486,14 @@ window.WC26 = {"meta":{"generated":"2026-06-10T23:05:59Z","n_sims":1000000,"seed
    ============================================================ */
 const ADSENSE_CLIENT = 'ca-pub-6703293705965908';
 /* Resultados OFICIALES ya disputados (se fijan como manuales: la simulación los respeta).
-   Partido 1 · 11-jun-2026 · Grupo A: México 2-0 Sudáfrica (Quiñones 9', R. Jiménez 67'). */
-const OFFICIAL_RESULTS = { 'G0': {h:2, a:0} };
+   Partido 1 · 11-jun-2026 · Grupo A: México 2-0 Sudáfrica (Quiñones 9', R. Jiménez 67').
+   Partido 2 · 11-jun-2026 · Grupo A: Corea del Sur 2-1 Chequia.
+   Partido 3 · 12-jun-2026 · Grupo B: Canadá 1-1 Bosnia y Herzegovina. */
+const OFFICIAL_RESULTS = { 'G0': {h:2, a:0}, 'G1': {h:2, a:1}, 'G2': {h:1, a:1} };
 function applyOfficialResults(){
   for(const [k,r] of Object.entries(OFFICIAL_RESULTS)){
-    if(!Store.result(k)) Store.setResult(k, r.h, r.a, 'manual');
+    const cur=Store.result(k);
+    if(!cur||cur.h!==r.h||cur.a!==r.a||cur.source!=='manual') Store.setResult(k, r.h, r.a, 'manual');
   }
 }
 const D = window.WC26;
@@ -527,6 +609,31 @@ const Store = {
       const raw=localStorage.getItem(LS_KEY);
       if(raw){ const s=JSON.parse(raw); if(s&&s.version===2) this.state={...this.state,...s}; }
     }catch(e){}
+    this.sanitize();
+  },
+  sanitize(){
+    const current=this.state&&typeof this.state==='object'?this.state:{};
+    this.state={version:2,results:{},favorite:null,theme:'dark',lang:'es',tourCursor:0,...current};
+    if(this.state.lang!=='es'&&this.state.lang!=='en') this.state.lang='es';
+    if(this.state.theme!=='dark'&&this.state.theme!=='light') this.state.theme='dark';
+    if(!CODES.includes(this.state.favorite)) this.state.favorite=null;
+    const clean={};
+    const rawResults=this.state.results;
+    if(rawResults&&typeof rawResults==='object'&&!Array.isArray(rawResults)){
+      for(const [key,r] of Object.entries(rawResults)){
+        const isGroup=/^G(?:[0-9]|[1-6][0-9]|7[01])$/.test(key);
+        const isKO=/^M(?:7[3-9]|8[0-9]|9[0-9]|10[0-4])$/.test(key);
+        if((!isGroup&&!isKO)||!r||typeof r!=='object') continue;
+        const h=Number(r.h), a=Number(r.a);
+        if(!Number.isInteger(h)||!Number.isInteger(a)||h<0||a<0||h>20||a>20) continue;
+        if(isKO&&h===a&&r.penWinner!=='H'&&r.penWinner!=='A') continue;
+        clean[key]={h,a,source:r.source==='sim'?'sim':'manual'};
+        if(isKO&&h===a) clean[key].penWinner=r.penWinner;
+      }
+    }
+    this.state.results=clean;
+    const cursor=Number(this.state.tourCursor);
+    this.state.tourCursor=Number.isFinite(cursor)?Math.max(0,Math.min(104,Math.floor(cursor))):0;
   },
   save(){ try{ localStorage.setItem(LS_KEY,JSON.stringify(this.state)); }catch(e){} },
   result(key){ return this.state.results[key]||null; },
@@ -996,9 +1103,15 @@ const App = {
     this.renderNav();
     document.getElementById('brandtag').textContent=T().tag;
     document.getElementById('foot').innerHTML=`<div>${esc(T().footer)}</div>
-      <div style="margin-top:5px">1.000.000 sims · seed ${D.meta.seed} · ${esc(D.meta.generated)}
-        · <a href="#" onclick="showPrivacy();return false">${App.lang==='es'?'Privacidad':'Privacy'}</a></div>`;
-    this.initAds();
+      <div style="margin-top:5px">1.000.000 sims · seed ${D.meta.seed} · ${esc(D.meta.generated)}</div>
+      <div class="legal-links">
+        <a href="#sobre" onclick="showAbout();return false">${App.lang==='es'?'Sobre la herramienta':'About'}</a>
+        <a href="#privacidad" onclick="showPrivacy();return false">${App.lang==='es'?'Privacidad':'Privacy'}</a>
+        <a href="#cookies" onclick="showCookies();return false">${App.lang==='es'?'Cookies':'Cookies'}</a>
+        <a href="#condiciones" onclick="showTerms();return false">${App.lang==='es'?'Condiciones de uso':'Terms of use'}</a>
+        <a href="#configurar-cookies" onclick="Consent.openSettings();return false">${App.lang==='es'?'Configurar cookies':'Cookie settings'}</a>
+      </div>`;
+    Consent.init();
   },
   renderNav(){
     const ids=['home','tour','bracket','calendar','follow','teams','compare','analysis','method'];
@@ -1011,30 +1124,46 @@ const App = {
   },
   go(v,opts){
     if(window.tourAbort) window.tourAbort(true);
+    const renderers={home:renderHome,tour:renderTour,bracket:renderBracket,calendar:renderCalendar,follow:renderFollow,
+      teams:renderTeams,compare:renderCompare,analysis:renderAnalysis,method:renderMethod};
+    if(!renderers[v]) v='home';
     this.view=v;
     if(opts&&opts.team) this.team=opts.team;
     document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));
-    document.getElementById('v-'+v).classList.add('on');
+    const viewEl=document.getElementById('v-'+v);
+    if(!viewEl) return;
+    viewEl.classList.add('on');
     this.renderNav();
-    ({home:renderHome,tour:renderTour,bracket:renderBracket,calendar:renderCalendar,follow:renderFollow,
-      teams:renderTeams,compare:renderCompare,analysis:renderAnalysis,method:renderMethod})[v]();
+    renderers[v]();
     try{window.scrollTo({top:0,behavior:'smooth'});}catch(e){}
   },
   initAds(){
-    if(!ADSENSE_CLIENT||App._adsLoaded) return;
-    App._adsLoaded=true;
-    if(!document.querySelector('script[src*="adsbygoogle.js"]')){
-      const sc=document.createElement('script');
-      sc.async=true;
-      sc.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='+ADSENSE_CLIENT;
-      sc.crossOrigin='anonymous';
-      document.head.appendChild(sc);
-    }
-    const slot=document.getElementById('adslot-top');
-    if(slot){
-      slot.classList.add('on');
-      slot.querySelector('ins').setAttribute('data-ad-client',ADSENSE_CLIENT);
-      try{(window.adsbygoogle=window.adsbygoogle||[]).push({});}catch(e){}
+    try{
+      if(!ADSENSE_CLIENT||App._adsLoaded) return;
+      const consent = Consent.get();
+      if(!consent || consent.ads !== true) return;
+      if(location.protocol && !/^https?:$/.test(location.protocol)) return;
+      App._adsLoaded=true;
+      window.adsbygoogle = window.adsbygoogle || [];
+      window.adsbygoogle.pauseAdRequests = 0;
+      window.adsbygoogle.requestNonPersonalizedAds = consent.personalized === false ? 1 : 0;
+      if(!document.querySelector('script[src*="adsbygoogle.js"]')){
+        const sc=document.createElement('script');
+        sc.async=true;
+        sc.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='+ADSENSE_CLIENT;
+        sc.crossOrigin='anonymous';
+        document.head.appendChild(sc);
+      }
+      const slot=document.getElementById('adslot-main');
+      if(slot){
+        slot.classList.add('on');
+        const ins=slot.querySelector('ins');
+        if(ins) ins.setAttribute('data-ad-client',ADSENSE_CLIENT);
+        setTimeout(()=>{ try{(window.adsbygoogle=window.adsbygoogle||[]).push({});}catch(e){} },0);
+      }
+    }catch(e){
+      App._adsLoaded=false;
+      console.warn('AdSense init skipped',e);
     }
   },
   toggleTheme(){
@@ -1050,25 +1179,185 @@ const App = {
   },
 };
 
-function showPrivacy(){
+
+const CONSENT_KEY = 'wc26_cookie_consent_v1';
+
+const Consent = {
+  get(){
+    try{
+      const c=JSON.parse(localStorage.getItem(CONSENT_KEY)||'null');
+      if(!c||typeof c!=='object'||!c.choice) return null;
+      return {
+        choice:String(c.choice),
+        necessary:true,
+        ads:c.ads===true,
+        personalized:c.personalized===true,
+        ts:c.ts||null
+      };
+    }catch(e){ return null; }
+  },
+  save(v){
+    try{ localStorage.setItem(CONSENT_KEY,JSON.stringify({...v,ts:new Date().toISOString()})); }catch(e){}
+  },
+  init(){
+    const bar=document.getElementById('cookiebar');
+    if(!bar) return;
+    this.localize();
+    const accept=document.getElementById('cookie-accept');
+    const reject=document.getElementById('cookie-reject');
+    const more=document.getElementById('cookie-more');
+    if(accept) accept.onclick=()=>this.acceptAll();
+    if(reject) reject.onclick=()=>this.rejectAds();
+    if(more) more.onclick=()=>showCookies();
+    const c=this.get();
+    if(c && c.choice){
+      bar.classList.remove('on');
+      if(c.ads===true) setTimeout(()=>App.initAds(),0);
+    }else{
+      bar.classList.add('on');
+      window.adsbygoogle = window.adsbygoogle || [];
+      window.adsbygoogle.pauseAdRequests = 1;
+    }
+  },
+  localize(){
+    const es=App.lang==='es';
+    const title=document.getElementById('cookiebar-title');
+    const txt=document.getElementById('cookiebar-text');
+    const accept=document.getElementById('cookie-accept');
+    const reject=document.getElementById('cookie-reject');
+    const more=document.getElementById('cookie-more');
+    if(title) title.textContent=es?'Privacidad y cookies':'Privacy and cookies';
+    if(txt) txt.textContent=es
+      ?'Guardamos tu predicción en este navegador y solo cargamos publicidad de Google cuando aceptas cookies de publicidad. Puedes usar la herramienta con cookies necesarias únicamente.'
+      :'Your prediction is stored in this browser and Google advertising loads only when you accept advertising cookies. You can use the tool with necessary cookies only.';
+    if(accept) accept.textContent=es?'Aceptar publicidad':'Accept advertising';
+    if(reject) reject.textContent=es?'Solo necesarias':'Necessary only';
+    if(more) more.textContent=es?'Más información':'More information';
+  },
+  acceptAll(){
+    this.save({choice:'accept',necessary:true,ads:true,personalized:true});
+    const bar=document.getElementById('cookiebar'); if(bar) bar.classList.remove('on');
+    App._adsLoaded=false;
+    setTimeout(()=>App.initAds(),0);
+    toast(App.lang==='es'?'Cookies de publicidad aceptadas.':'Advertising cookies accepted.');
+  },
+  rejectAds(){
+    this.save({choice:'necessary',necessary:true,ads:false,personalized:false});
+    window.adsbygoogle = window.adsbygoogle || [];
+    window.adsbygoogle.pauseAdRequests = 1;
+    const bar=document.getElementById('cookiebar'); if(bar) bar.classList.remove('on');
+    toast(App.lang==='es'?'Configuración guardada: solo cookies necesarias.':'Saved: necessary cookies only.');
+  },
+  openSettings(){
+    try{ localStorage.removeItem(CONSENT_KEY); }catch(e){}
+    App._adsLoaded=false;
+    const slot=document.getElementById('adslot-main'); if(slot) slot.classList.remove('on');
+    this.init();
+  }
+};
+
+function showLegal(kind){
   const es=App.lang==='es';
-  document.getElementById('modalbody').innerHTML=es?`
-    <h2 style="margin-bottom:10px">Política de privacidad</h2>
-    <div class="sub" style="display:grid;gap:10px">
-      <p><b>Datos locales.</b> Tus pronósticos, resultados, selección favorita y preferencias (tema, idioma, zona horaria) se guardan únicamente en el almacenamiento local de tu navegador (localStorage). No se envían a ningún servidor ni podemos acceder a ellos.</p>
-      <p><b>Banderas.</b> Las imágenes de banderas se cargan desde flagcdn.com, que puede registrar tu dirección IP como cualquier servidor de imágenes.</p>
-      <p><b>Publicidad.</b> Este sitio puede mostrar anuncios de Google AdSense. Google y sus socios pueden usar cookies para personalizar los anuncios y medir su rendimiento. Puedes gestionar tu consentimiento en el aviso correspondiente y más información en <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">policies.google.com</a>.</p>
-      <p><b>Sin cuentas ni rastreo propio.</b> No pedimos registro, no usamos analítica propia y no vendemos datos.</p>
-    </div>`:`
-    <h2 style="margin-bottom:10px">Privacy policy</h2>
-    <div class="sub" style="display:grid;gap:10px">
-      <p><b>Local data.</b> Your predictions, results, favourite team and preferences are stored only in your browser's localStorage. They are never sent to any server.</p>
-      <p><b>Flags.</b> Flag images load from flagcdn.com, which may log your IP like any image server.</p>
-      <p><b>Advertising.</b> This site may show Google AdSense ads. Google and its partners may use cookies to personalise ads and measure performance. See <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">policies.google.com</a>.</p>
-      <p><b>No accounts, no first-party tracking.</b></p>
-    </div>`;
+  const content={
+    es:{
+      about:{
+        title:'Sobre WC26 Pulse',
+        html:`<p><b>WC26 Pulse</b> es una herramienta editorial e interactiva para seguir, simular y analizar el Mundial FIFA 2026.</p>
+        <p>La página permite introducir resultados manuales, completar partidos pendientes mediante simulación, consultar el calendario, revisar el cuadro de eliminatorias, comparar selecciones y seguir el recorrido de una selección favorita.</p>
+        <p>El contenido principal de la web es el simulador: tablas de grupos, calendario, perfiles de selecciones, probabilidades por ronda, metodología y análisis del modelo. No es una web de apuestas ni una promesa de resultados reales.</p>
+        <p>WC26 Pulse no está afiliado, patrocinado ni aprobado por FIFA. Las marcas, nombres de competiciones y selecciones se usan con finalidad informativa y descriptiva.</p>`
+      },
+      privacy:{
+        title:'Política de privacidad',
+        html:`<p><b>Responsable editorial.</b> WC26 Pulse es una herramienta informativa y de entretenimiento publicada bajo el dominio wc2026predictiontool.es.</p>
+        <p><b>Datos que guardamos.</b> Tus pronósticos, resultados, selección favorita y preferencias de uso se guardan únicamente en el almacenamiento local de tu navegador (localStorage). Esta información no se envía a ningún servidor propio.</p>
+        <p><b>Sin cuentas.</b> No pedimos registro ni datos identificativos. Tampoco vendemos datos personales.</p>
+        <p><b>Servicios externos.</b> Las banderas se cargan desde flagcdn.com. Como ocurre con cualquier recurso externo, ese proveedor puede recibir información técnica básica, como la dirección IP o el agente de usuario.</p>
+        <p><b>Publicidad.</b> El sitio puede mostrar anuncios de Google AdSense. Google y sus socios pueden usar cookies o tecnologías similares para publicar anuncios, limitar su frecuencia, medir rendimiento y, si das tu consentimiento, personalizarlos. Puedes consultar más información en <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">Google Advertising</a>.</p>
+        <p><b>Base de uso.</b> Las cookies necesarias permiten guardar tu predicción en este navegador. Las cookies de publicidad solo se activan si aceptas la publicidad desde el aviso de cookies.</p>
+        <p><b>Gestión.</b> Puedes cambiar tu elección desde el enlace “Configurar cookies” situado en el pie de página.</p>`
+      },
+      cookies:{
+        title:'Política de cookies',
+        html:`<p><b>Qué son las cookies.</b> Las cookies y tecnologías similares permiten que una web recuerde información o preste determinadas funciones.</p>
+        <ul class="legal-list">
+          <li><b>Necesarias/locales:</b> usamos localStorage para guardar resultados, predicción, selección favorita, idioma, tema visual y zona horaria. Son necesarias para que la herramienta funcione de forma cómoda.</li>
+          <li><b>Publicidad:</b> Google AdSense puede utilizar cookies para servir anuncios, medir resultados y evitar mostrar el mismo anuncio demasiadas veces. Solo se cargan anuncios si aceptas la publicidad.</li>
+          <li><b>Servicios externos:</b> las banderas se cargan desde flagcdn.com.</li>
+        </ul>
+        <p><b>Cómo cambiar tu elección.</b> Usa el enlace “Configurar cookies” del pie de página. También puedes borrar los datos desde la configuración de tu navegador.</p>
+        <p><b>Rechazo.</b> Si eliges “Solo necesarias”, la herramienta seguirá funcionando, pero no se cargarán bloques publicitarios de Google desde esta página.</p>`
+      },
+      terms:{
+        title:'Condiciones de uso',
+        html:`<p>WC26 Pulse ofrece información, simulaciones y análisis probabilístico con finalidad divulgativa y de entretenimiento.</p>
+        <ul class="legal-list">
+          <li>Las probabilidades no garantizan resultados reales.</li>
+          <li>Los datos deportivos pueden cambiar por lesiones, convocatorias, sanciones, decisiones tácticas, calendario u otros factores.</li>
+          <li>La herramienta no presta servicios de apuestas ni recomienda apostar.</li>
+          <li>El usuario es responsable de los resultados manuales que introduce y de cómo interpreta las simulaciones.</li>
+          <li>El sitio puede actualizar metodología, datos, diseño y contenidos para mejorar la experiencia.</li>
+        </ul>
+        <p>El uso de la página implica aceptar estas condiciones básicas de uso.</p>`
+      }
+    },
+    en:{
+      about:{
+        title:'About WC26 Pulse',
+        html:`<p><b>WC26 Pulse</b> is an editorial and interactive tool to follow, simulate and analyse the FIFA World Cup 2026.</p>
+        <p>The site lets users enter manual results, simulate pending matches, view the schedule, explore the knockout bracket, compare teams and follow a favourite team.</p>
+        <p>The main publisher content is the simulator: group tables, schedule, team profiles, round probabilities, methodology and model analysis. It is not a betting website and it does not promise real-world outcomes.</p>
+        <p>WC26 Pulse is not affiliated with, sponsored by or endorsed by FIFA. Names and marks are used for informational and descriptive purposes.</p>`
+      },
+      privacy:{
+        title:'Privacy policy',
+        html:`<p><b>Editorial controller.</b> WC26 Pulse is an informational and entertainment tool published under wc2026predictiontool.es.</p>
+        <p><b>Data we store.</b> Your predictions, results, favourite team and preferences are stored only in your browser localStorage. This information is not sent to our own server.</p>
+        <p><b>No accounts.</b> We do not request registration or identifying details. We do not sell personal data.</p>
+        <p><b>External services.</b> Flags are loaded from flagcdn.com. Like any external resource provider, it may receive basic technical information such as IP address or user agent.</p>
+        <p><b>Advertising.</b> The site may show Google AdSense ads. Google and its partners may use cookies or similar technologies to serve ads, limit ad frequency, measure performance and, when consent is given, personalise ads. More information is available at <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">Google Advertising</a>.</p>
+        <p><b>Choice.</b> Necessary storage keeps the simulator working in this browser. Advertising cookies are enabled only when advertising is accepted in the cookie notice.</p>
+        <p><b>Management.</b> You can change your choice using “Cookie settings” in the footer.</p>`
+      },
+      cookies:{
+        title:'Cookie policy',
+        html:`<p><b>What cookies are.</b> Cookies and similar technologies help a website remember information or provide certain functions.</p>
+        <ul class="legal-list">
+          <li><b>Necessary/local:</b> localStorage stores results, prediction, favourite team, language, theme and time zone. These are needed for a comfortable use of the tool.</li>
+          <li><b>Advertising:</b> Google AdSense may use cookies to serve ads, measure performance and prevent showing the same ad too often. Ads load only if advertising is accepted.</li>
+          <li><b>External services:</b> flags are loaded from flagcdn.com.</li>
+        </ul>
+        <p><b>Changing your choice.</b> Use “Cookie settings” in the footer. You can also clear browser data from your browser settings.</p>
+        <p><b>Rejecting.</b> If you choose “Necessary only”, the tool keeps working but Google advertising blocks are not loaded from this page.</p>`
+      },
+      terms:{
+        title:'Terms of use',
+        html:`<p>WC26 Pulse provides information, simulations and probabilistic analysis for informational and entertainment purposes.</p>
+        <ul class="legal-list">
+          <li>Probabilities do not guarantee real results.</li>
+          <li>Sports data may change because of injuries, squads, suspensions, tactics, scheduling or other factors.</li>
+          <li>The tool does not provide betting services and does not recommend betting.</li>
+          <li>The user is responsible for manual results entered and for how simulations are interpreted.</li>
+          <li>The site may update methodology, data, design and content to improve the experience.</li>
+        </ul>
+        <p>Using the page means accepting these basic terms of use.</p>`
+      }
+    }
+  };
+  const d=(es?content.es:content.en)[kind] || (es?content.es:content.en).privacy;
+  document.getElementById('modalbody').innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px">
+      <h2>${esc(d.title)}</h2>
+      <button class="btn sec sm" type="button" onclick="document.getElementById('modal').classList.remove('on')">${es?'Cerrar':'Close'}</button>
+    </div>
+    <div class="sub" style="display:grid;gap:10px">${d.html}</div>`;
   document.getElementById('modal').classList.add('on');
 }
+
+function showPrivacy(){ showLegal('privacy'); }
+function showCookies(){ showLegal('cookies'); }
+function showTerms(){ showLegal('terms'); }
+function showAbout(){ showLegal('about'); }
+
 /* ---------- confirm dialog ---------- */
 function confirmDialog(msg,opts,onYes){
   const t=T();
@@ -2526,8 +2815,22 @@ function renderMethod(){
 
 /* ================= boot ================= */
 window.App=App; window.Store=Store; window.Derive=Derive; window.Sim=Sim; window.SIM_CFG=SIM_CFG; window.Tour=Tour;
-App.init();
-App.go('home');
+function bootApp(){
+  try{
+    App.init();
+    App.go('home');
+  }catch(err){
+    console.error('WC26 Pulse startup error',err);
+    const main=document.getElementById('main');
+    if(main) main.innerHTML=`<section class="view on">
+      <div class="card" style="max-width:760px;margin:40px auto">
+        <h1 style="margin-bottom:8px">No se pudo cargar WC26 Pulse</h1>
+        <p class="sub">La página ha encontrado datos locales incompatibles o un bloqueo del navegador. Puedes reiniciar solo los datos guardados en este navegador y volver a abrir la herramienta.</p>
+        <button class="btn sec" style="margin-top:14px" onclick="try{localStorage.removeItem('wc26pulse_v2')}catch(e){};location.reload()">Reiniciar datos locales</button>
+      </div>
+    </section>`;
+  }
+}
 
 /* ================= Calendario (horarios oficiales, multi–zona horaria) ================= */
 const CAL_TZS = [
@@ -2623,6 +2926,9 @@ function renderCalendar(){
   </div>
   <div class="card" style="padding:8px 10px">${body}</div>`;
 }
+
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bootApp,{once:true});
+else bootApp();
 
 </script>
 </body>
